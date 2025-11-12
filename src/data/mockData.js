@@ -5,8 +5,8 @@ export const MOCK_USERS = [
     username: 'student1',
     password: 'pass123',
     role: 'student',
-    name: 'Alice Johnson',
-    email: 'alice@example.com',
+    name: 'Dhrupad Das',
+    email: 'dhrudas@example.com',
     enrolledCourses: [1, 2],
     progress: { 1: 65, 2: 30 },
     assignments: {
@@ -20,8 +20,8 @@ export const MOCK_USERS = [
     username: 'student2',
     password: 'pass123',
     role: 'student',
-    name: 'Bob Smith',
-    email: 'bob@example.com',
+    name: 'Ishan Pandey',
+    email: 'Ishpandey@example.com',
     enrolledCourses: [1],
     progress: { 1: 40 },
     assignments: { 1: { 1: { submitted: true, grade: 78 } } },
@@ -32,8 +32,8 @@ export const MOCK_USERS = [
     username: 'teacher1',
     password: 'pass123',
     role: 'teacher',
-    name: 'Dr. Sarah Wilson',
-    email: 'sarah@example.com',
+    name: 'Dr. Manjunath',
+    email: 'Manjunath@example.com',
     managedCourses: [1, 2, 3]
   }
 ];
@@ -126,7 +126,7 @@ export const MOCK_COURSES = [
     id: 3,
     title: 'Full-Stack Development',
     description: 'Build complete applications from frontend to backend.',
-    instructor: 'Dr. Sarah Wilson',
+    instructor: 'Dr. Manjunath',
     duration: '12 weeks',
     level: 'Intermediate',
     thumbnail: '💻',

@@ -33,42 +33,46 @@ const CourseView = ({ courseId }) => {
     }
   };
 
-  const handleModuleComplete = async (moduleId) => {
-    const moduleIndex = course.modules.findIndex(m => m.id === moduleId);
-    const progress = Math.round(((moduleIndex + 1) / course.modules.length) * 100);
-    
-    try {
-      const updatedUser = await ApiService.updateProgress(user.id, courseId, progress);
-      updateUser(updatedUser);
-    } catch (err) {
-      console.error('Failed to update progress:', err);
-    }
-  };
+  // At the top of CourseView.jsx, update the handleModuleComplete function:
 
-  const handleSubmitAssignment = async () => {
-    if (!submissionText.trim()) {
-      alert('Please enter your submission');
-      return;
-    }
+const handleModuleComplete = async (moduleId) => {
+  const moduleIndex = course.modules.findIndex(m => m.id === moduleId);
+  const progress = Math.round(((moduleIndex + 1) / course.modules.length) * 100);
+  
+  try {
+    const updatedUser = await ApiService.updateProgress(user.id, courseId, progress);
+    updateUser(updatedUser);
+    alert(`Module completed! Your progress is now ${progress}%`);
+  } catch (err) {
+    console.error('Failed to update progress:', err);
+    alert('Failed to update progress. Please try again.');
+  }
+};
 
-    setSubmitting(true);
-    try {
-      const updatedUser = await ApiService.submitAssignment(
-        user.id,
-        courseId,
-        selectedAssignment.id,
-        submissionText
-      );
-      updateUser(updatedUser);
-      setSubmissionText('');
-      setSelectedAssignment(null);
-      alert('Assignment submitted successfully!');
-    } catch (err) {
-      alert('Submission failed: ' + err.message);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+const handleSubmitAssignment = async () => {
+  if (!submissionText.trim()) {
+    alert('Please enter your submission');
+    return;
+  }
+
+  setSubmitting(true);
+  try {
+    const updatedUser = await ApiService.submitAssignment(
+      user.id,
+      courseId,
+      selectedAssignment.id,
+      submissionText
+    );
+    updateUser(updatedUser);
+    setSubmissionText('');
+    setSelectedSubmission(null);
+    alert('Assignment submitted successfully!');
+  } catch (err) {
+    alert('Submission failed: ' + err.message);
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   const toggleModule = (moduleId) => {
     setExpandedModules(prev => ({

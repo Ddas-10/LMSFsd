@@ -109,31 +109,44 @@ const AppContent = () => {
                   <ChevronDown size={16} className="text-neutral-400" />
                 </button>
 
-                {profileMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-neutral-200 py-2">
-                    <div className="px-4 py-3 border-b border-neutral-100">
-                      <p className="font-semibold text-neutral-900">{user.name}</p>
-                      <p className="text-sm text-neutral-500">{user.email}</p>
-                    </div>
-                    <button className="w-full px-4 py-2 text-left hover:bg-neutral-50 flex items-center gap-2 text-neutral-700">
-                      <User size={16} />
-                      <span className="text-sm">Profile</span>
-                    </button>
-                    <button className="w-full px-4 py-2 text-left hover:bg-neutral-50 flex items-center gap-2 text-neutral-700">
-                      <Settings size={16} />
-                      <span className="text-sm">Settings</span>
-                    </button>
-                    <div className="border-t border-neutral-100 mt-2 pt-2">
-                      <button
-                        onClick={handleLogout}
-                        className="w-full px-4 py-2 text-left hover:bg-red-50 flex items-center gap-2 text-red-600"
+                
+
+                  {profileMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-neutral-200 py-2">
+                      <div className="px-4 py-3 border-b border-neutral-100">
+                        <p className="font-semibold text-neutral-900">{user.name}</p>
+                        <p className="text-sm text-neutral-500">{user.email}</p>
+                      </div>
+                      <button 
+                        onClick={() => console.log('Current User:', user)}
+                        className="w-full px-4 py-2 text-left hover:bg-neutral-50 flex items-center gap-2 text-neutral-700"
                       >
-                        <LogOut size={16} />
-                        <span className="text-sm font-medium">Sign Out</span>
+                        <User size={16} />
+                        <span className="text-sm">Show User Data</span>
                       </button>
+                      <button 
+                        onClick={() => {
+                          const users = JSON.parse(localStorage.getItem('lms_users') || '[]');
+                          const courses = JSON.parse(localStorage.getItem('lms_courses') || '[]');
+                          console.log('Storage Users:', users);
+                          console.log('Storage Courses:', courses);
+                        }}
+                        className="w-full px-4 py-2 text-left hover:bg-neutral-50 flex items-center gap-2 text-neutral-700"
+                      >
+                        <Settings size={16} />
+                        <span className="text-sm">Show Storage</span>
+                      </button>
+                      <div className="border-t border-neutral-100 mt-2 pt-2">
+                        <button
+                          onClick={handleLogout}
+                          className="w-full px-4 py-2 text-left hover:bg-red-50 flex items-center gap-2 text-red-600"
+                        >
+                          <LogOut size={16} />
+                          <span className="text-sm font-medium">Sign Out</span>
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
 
               {/* Mobile Menu Button */}
@@ -213,6 +226,7 @@ const AppContent = () => {
             )}
           </>
         )}
+        
 
         {user.role === 'teacher' && (
           <>

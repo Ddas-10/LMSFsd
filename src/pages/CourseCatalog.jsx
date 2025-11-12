@@ -1,3 +1,4 @@
+// src/pages/CourseCatalog.jsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { ApiService } from '../services/api';
@@ -5,7 +6,7 @@ import { Card, Button, Badge } from '../components/ui';
 import { Search, Filter, BookOpen, Clock, Users, Star, CheckCircle } from 'lucide-react';
 
 const CourseCatalog = () => {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, refreshUser } = useAuth();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(null);
@@ -32,6 +33,8 @@ const CourseCatalog = () => {
     try {
       const updatedUser = await ApiService.enrollInCourse(user.id, courseId);
       updateUser(updatedUser);
+      await loadCourses(); // Refresh courses to update enrolled students count
+      alert('Successfully enrolled in the course!');
     } catch (err) {
       alert('Enrollment failed: ' + err.message);
     } finally {
@@ -50,7 +53,7 @@ const CourseCatalog = () => {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-600 mx-auto mb-4"></div>
           <p className="text-neutral-600 font-medium">Loading courses...</p>
         </div>
       </div>
@@ -75,14 +78,14 @@ const CourseCatalog = () => {
               placeholder="Search courses..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all"
+              className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-100 transition-all"
             />
           </div>
           <div className="flex gap-2">
             <select
               value={filterLevel}
               onChange={(e) => setFilterLevel(e.target.value)}
-              className="px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all bg-white"
+              className="px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-100 transition-all bg-white"
             >
               <option>All</option>
               <option>Beginner</option>
@@ -106,13 +109,13 @@ const CourseCatalog = () => {
       {/* Courses Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCourses.map(course => {
-          const isEnrolled = user.enrolledCourses.includes(course.id);
-          const rating = 4.5 + Math.random() * 0.5; // Mock rating
+          const isEnrolled = user.enrolledCourses?.includes(course.id);
+          const rating = 4.5 + Math.random() * 0.5;
           
           return (
             <Card key={course.id} hover className="flex flex-col h-full group">
               {/* Course Thumbnail */}
-              <div className="relative h-48 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+              <div className="relative h-48 bg-gradient-to-br from-primary-100 to-accent-100 rounded-xl mb-4 flex items-center justify-center overflow-hidden">
                 <span className="text-7xl group-hover:scale-110 transition-transform duration-300">
                   {course.thumbnail}
                 </span>
@@ -134,7 +137,7 @@ const CourseCatalog = () => {
                       <span className="text-sm font-semibold text-neutral-700">{rating.toFixed(1)}</span>
                     </div>
                   </div>
-                  <h3 className="font-bold text-xl text-neutral-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-bold text-xl text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
                     {course.title}
                   </h3>
                   <p className="text-neutral-600 text-sm mb-3 line-clamp-2">

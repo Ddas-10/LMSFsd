@@ -1,13 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { ApiService } from '../services/api';
 import { Card, Badge, ProgressBar, Button } from '../components/ui';
-import { MOCK_COURSES } from '../data/mockData';
 import { BookOpen, Clock, Target, TrendingUp, ArrowRight } from 'lucide-react';
 
 const MyCourses = ({ onSelectCourse }) => {
   const { user } = useAuth();
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  if (user.enrolledCourses.length === 0) {
+  useEffect(() => {
+    loadMyCourses();
+  }, [user.enrolledCourses]);
+
+  const loadMyCourses = async () => {
+    try {
+      const allCourses = await ApiService.fetchCourses();
+      const myCourses = allCourses.filter(c => user.enrolledCourses?.includes(c.id));
+      setCourses(myCourses);
+    } catch (err) {
+      console.error('Failed to load courses:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-600"></div>
+      </div>
+    );
+  }
+
+  if (user.enrolledCourses?.length === 0 || courses.length === 0) {
     return (
       <div className="text-center py-20">
         <Card className="max-w-2xl mx-auto">
@@ -39,16 +65,16 @@ const MyCourses = ({ onSelectCourse }) => {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+        <Card className="bg-gradient-to-br from-primary-50 to-accent-50 border-primary-200">
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-neutral-700">In Progress</h3>
-            <TrendingUp className="text-blue-600" size={20} />
+            <TrendingUp className="text-primary-600" size={20} />
           </div>
           <p className="text-4xl font-bold text-neutral-900">
-            {user.enrolledCourses.filter(id => {
+            {user.enrolledCourses?.filter(id => {
               const progress = user.progress[id] || 0;
               return progress > 0 && progress < 100;
-            }).length}
+            }).length || 0}
           </p>
           <p className="text-sm text-neutral-600 mt-2">Active courses</p>
         </Card>
@@ -59,7 +85,7 @@ const MyCourses = ({ onSelectCourse }) => {
             <Target className="text-green-600" size={20} />
           </div>
           <p className="text-4xl font-bold text-neutral-900">
-            {user.enrolledCourses.filter(id => user.progress[id] === 100).length}
+            {user.enrolledCourses?.filter(id => user.progress[id] === 100).length || 0}
           </p>
           <p className="text-sm text-neutral-600 mt-2">Finished courses</p>
         </Card>
@@ -70,7 +96,7 @@ const MyCourses = ({ onSelectCourse }) => {
             <Clock className="text-amber-600" size={20} />
           </div>
           <p className="text-4xl font-bold text-neutral-900">
-            {user.enrolledCourses.filter(id => !user.progress[id] || user.progress[id] === 0).length}
+            {user.enrolledCourses?.filter(id => !user.progress[id] || user.progress[id] === 0).length || 0}
           </p>
           <p className="text-sm text-neutral-600 mt-2">Ready to begin</p>
         </Card>
@@ -80,26 +106,23 @@ const MyCourses = ({ onSelectCourse }) => {
       <div>
         <h2 className="text-2xl font-bold text-neutral-900 mb-6">All Courses</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {user.enrolledCourses.map(courseId => {
-            const course = MOCK_COURSES.find(c => c.id === courseId);
-            if (!course) return null;
-
-            const progress = user.progress[courseId] || 0;
+          {courses.map(course => {
+            const progress = user.progress[course.id] || 0;
 
             return (
               <Card 
-                key={courseId}
+                key={course.id}
                 hover
                 className="group cursor-pointer"
-                onClick={() => onSelectCourse(courseId)}
+                onClick={() => onSelectCourse(course.id)}
               >
                 <div className="flex gap-4 mb-4">
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center text-5xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-accent-100 rounded-2xl flex items-center justify-center text-5xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                     {course.thumbnail}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-xl text-neutral-900 group-hover:text-blue-600 transition-colors">
+                      <h3 className="font-bold text-xl text-neutral-900 group-hover:text-primary-600 transition-colors">
                         {course.title}
                       </h3>
                       <Badge variant={progress >= 75 ? 'success' : 'default'}>

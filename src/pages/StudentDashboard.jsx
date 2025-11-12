@@ -7,14 +7,20 @@ import {
   ArrowRight, Calendar, CheckCircle2, AlertCircle 
 } from 'lucide-react';
 
+// Add to StudentDashboard.jsx
+
+
 const StudentDashboard = () => {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadCourses();
+    refreshUser(); // Refresh user data from localStorage
   }, []);
+
+  
 
   const loadCourses = async () => {
     try {

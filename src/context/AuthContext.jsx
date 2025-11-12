@@ -33,8 +33,30 @@ export const AuthProvider = ({ children }) => {
     setUser(updatedUser);
   }, []);
 
+  const refreshUser = useCallback(async () => {
+    if (user?.id) {
+      try {
+        const freshUser = await ApiService.getCurrentUser(user.id);
+        setUser(freshUser);
+        return freshUser;
+      } catch (err) {
+        console.error('Failed to refresh user:', err);
+      }
+    }
+  }, [user?.id]);
+
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut, updateUser, loading, error }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        signIn,
+        signOut,
+        updateUser,
+        refreshUser,
+        loading,
+        error,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -42,6 +64,6 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within AuthProvider');
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 };

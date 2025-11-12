@@ -6,7 +6,8 @@ export const Card = ({
   hover = false,
   gradient = false,
   glass = false,
-  padding = 'md'
+  padding = 'md',
+  onClick  // ✅ Add onClick prop
 }) => {
   const paddings = {
     none: '',
@@ -23,7 +24,12 @@ export const Card = ({
   const gradientStyles = gradient ? 'bg-gradient-to-br from-white to-neutral-50' : '';
 
   return (
-    <div className={`rounded-2xl ${baseStyles} ${hoverStyles} ${gradientStyles} ${paddings[padding]} ${className}`}>
+    <div 
+      className={`rounded-2xl ${baseStyles} ${hoverStyles} ${gradientStyles} ${paddings[padding]} ${className}`}
+      onClick={onClick}  // ✅ Add onClick handler
+      role={onClick ? 'button' : undefined}  // ✅ Accessibility
+      tabIndex={onClick ? 0 : undefined}  // ✅ Keyboard navigation
+    >
       {children}
     </div>
   );

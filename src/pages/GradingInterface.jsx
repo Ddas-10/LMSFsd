@@ -1,7 +1,7 @@
+// src/pages/GradingInterface.jsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { ApiService } from '../services/api';
-import { MOCK_USERS, MOCK_COURSES } from '../data/mockData';
 import { Card, Button, Badge, Modal, Input } from '../components/ui';
 import { Award, CheckCircle, Clock, AlertCircle, FileText, User } from 'lucide-react';
 
@@ -21,9 +21,15 @@ const GradingInterface = ({ onSelectCourse }) => {
       const courseData = await ApiService.fetchCourseById(courseId);
       setSelectedCourse(courseData);
       
-      const enrolledStudents = MOCK_USERS.filter(u => 
-        u.role === 'student' && u.enrolledCourses.includes(courseId)
+      // ✅ FIX: Changed from 'teacher' to 'student'
+      const allUsers = JSON.parse(localStorage.getItem('lms_users') || '[]');
+      const enrolledStudents = allUsers.filter(u => 
+        u.role === 'student' && u.enrolledCourses && u.enrolledCourses.includes(courseId)
       );
+      
+      console.log('📚 Loaded course:', courseData.title);
+      console.log('👥 Found students:', enrolledStudents.length);
+      
       setStudents(enrolledStudents);
     } catch (err) {
       console.error('Failed to load course data:', err);
@@ -33,6 +39,7 @@ const GradingInterface = ({ onSelectCourse }) => {
   };
 
   const handleSelectCourse = (courseId) => {
+    console.log('🎯 Selected course ID:', courseId);
     loadCourseData(courseId);
   };
 
@@ -49,6 +56,19 @@ const GradingInterface = ({ onSelectCourse }) => {
       return;
     }
 
+    if (gradeValue < 0) {
+      alert('Grade cannot be negative');
+      return;
+    }
+
+    console.log('📝 Submitting grade:', {
+      courseId: selectedCourse.id,
+      studentId: selectedSubmission.studentId,
+      assignmentId: selectedSubmission.assignmentId,
+      grade: gradeValue,
+      feedback
+    });
+
     setGrading(true);
     try {
       await ApiService.gradeAssignment(
@@ -58,12 +78,18 @@ const GradingInterface = ({ onSelectCourse }) => {
         gradeValue,
         feedback
       );
+      
+      console.log('✅ Grade submitted successfully!');
+      
       setSelectedSubmission(null);
       setGrade('');
       setFeedback('');
-      loadCourseData(selectedCourse.id);
+      
+      // Reload course data to show updated grades
+      await loadCourseData(selectedCourse.id);
       alert('Assignment graded successfully!');
     } catch (err) {
+      console.error('❌ Grading error:', err);
       alert('Failed to grade assignment: ' + err.message);
     } finally {
       setGrading(false);
@@ -79,12 +105,14 @@ const GradingInterface = ({ onSelectCourse }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {user.managedCourses.map(courseId => {
-            const course = MOCK_COURSES.find(c => c.id === courseId);
+          {user.managedCourses && user.managedCourses.map(courseId => {
+            const allCourses = JSON.parse(localStorage.getItem('lms_courses') || '[]');
+            const course = allCourses.find(c => c.id === courseId);
             if (!course) return null;
 
+            const allUsers = JSON.parse(localStorage.getItem('lms_users') || '[]');
             const pendingCount = course.enrolledStudents.reduce((count, studentId) => {
-              const student = MOCK_USERS.find(u => u.id === studentId);
+              const student = allUsers.find(u => u.id === studentId);
               if (!student) return count;
               
               const courseAssignments = student.assignments?.[courseId] || {};
@@ -101,10 +129,10 @@ const GradingInterface = ({ onSelectCourse }) => {
                 className="cursor-pointer group"
                 onClick={() => handleSelectCourse(courseId)}
               >
-                <div className="h-32 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl mb-4 flex items-center justify-center text-6xl group-hover:scale-105 transition-transform">
+                <div className="h-32 bg-gradient-to-br from-primary-100 to-accent-100 rounded-xl mb-4 flex items-center justify-center text-6xl group-hover:scale-105 transition-transform">
                   {course.thumbnail}
                 </div>
-                <h3 className="font-bold text-xl text-neutral-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="font-bold text-xl text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
                   {course.title}
                 </h3>
                 <div className="flex items-center justify-between text-sm">
@@ -129,7 +157,7 @@ const GradingInterface = ({ onSelectCourse }) => {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-600 mx-auto mb-4"></div>
           <p className="text-neutral-600 font-medium">Loading submissions...</p>
         </div>
       </div>
@@ -158,9 +186,9 @@ const GradingInterface = ({ onSelectCourse }) => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+        <Card className="bg-gradient-to-br from-primary-50 to-accent-50 border-primary-200">
           <div className="flex items-center gap-3 mb-2">
-            <FileText className="text-blue-600" size={20} />
+            <FileText className="text-primary-600" size={20} />
             <span className="text-sm font-semibold text-neutral-700">Total Assignments</span>
           </div>
           <p className="text-3xl font-bold text-neutral-900">{selectedCourse.assignments.length}</p>
@@ -213,8 +241,8 @@ const GradingInterface = ({ onSelectCourse }) => {
           <Card key={assignment.id}>
             <div className="flex items-start justify-between mb-6">
               <div className="flex items-start gap-3">
-                <div className="p-3 bg-blue-100 rounded-xl">
-                  <FileText className="text-blue-600" size={24} />
+                <div className="p-3 bg-primary-100 rounded-xl">
+                  <FileText className="text-primary-600" size={24} />
                 </div>
                 <div>
                   <h3 className="font-bold text-2xl text-neutral-900 mb-1">{assignment.title}</h3>
@@ -234,64 +262,86 @@ const GradingInterface = ({ onSelectCourse }) => {
             </div>
 
             <div className="space-y-3">
-              {students.map(student => {
-                const submission = student.assignments?.[selectedCourse.id]?.[assignment.id];
-                const isSubmitted = submission?.submitted;
-                const isGraded = submission?.grade !== null && submission?.grade !== undefined;
+              {students.length === 0 ? (
+                <div className="text-center py-8 text-neutral-500">
+                  No students enrolled yet
+                </div>
+              ) : (
+                students.map(student => {
+                  const submission = student.assignments?.[selectedCourse.id]?.[assignment.id];
+                  const isSubmitted = submission?.submitted;
+                  const isGraded = submission?.grade !== null && submission?.grade !== undefined;
 
-                return (
-                  <div key={student.id} className="border-2 border-neutral-200 rounded-xl p-5 hover:border-blue-300 transition-colors">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                          <span className="text-white font-bold text-lg">
-                            {student.name.charAt(0)}
-                          </span>
+                  console.log(`Student ${student.name} - Assignment ${assignment.id}:`, {
+                    hasSubmission: !!submission,
+                    isSubmitted,
+                    isGraded,
+                    grade: submission?.grade
+                  });
+
+                  return (
+                    <div key={student.id} className="border-2 border-neutral-200 rounded-xl p-5 hover:border-primary-300 transition-colors">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center">
+                            <span className="text-white font-bold text-lg">
+                              {student.name.charAt(0)}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-neutral-900">{student.name}</p>
+                            <p className="text-sm text-neutral-500">{student.email}</p>
+                            {submission?.submissionDate && (
+                              <p className="text-xs text-neutral-400 mt-1">
+                                Submitted: {new Date(submission.submissionDate).toLocaleString()}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-semibold text-neutral-900">{student.name}</p>
-                          <p className="text-sm text-neutral-500">{student.email}</p>
-                          {submission?.submissionDate && (
-                            <p className="text-xs text-neutral-400 mt-1">
-                              Submitted: {new Date(submission.submissionDate).toLocaleString()}
-                            </p>
+                        <div className="flex items-center gap-3">
+                          {!isSubmitted ? (
+                            <Badge variant="warning">Not Submitted</Badge>
+                          ) : isGraded ? (
+                            <div className="flex items-center gap-3">
+                              <Badge variant="success" size="lg">
+                                {submission.grade}/{assignment.points}
+                              </Badge>
+                              {submission.feedback && (
+                                <div className="text-xs text-green-600">
+                                  ✓ Feedback provided
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <Button
+                              variant="primary"
+                              onClick={() => {
+                                console.log('Opening grading modal for:', {
+                                  student: student.name,
+                                  assignment: assignment.title,
+                                  submission: submission.content
+                                });
+                                setSelectedSubmission({
+                                  studentId: student.id,
+                                  studentName: student.name,
+                                  assignmentId: assignment.id,
+                                  assignmentTitle: assignment.title,
+                                  maxPoints: assignment.points,
+                                  submission: submission.content,
+                                  submissionDate: submission.submissionDate
+                                });
+                              }}
+                              icon={Award}
+                            >
+                              Grade Submission
+                            </Button>
                           )}
                         </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        {!isSubmitted ? (
-                          <Badge variant="warning">Not Submitted</Badge>
-                        ) : isGraded ? (
-                          <div className="flex items-center gap-3">
-                            <Badge variant="success" size="lg">
-                              {submission.grade}/{assignment.points}
-                            </Badge>
-                            <Button variant="outline" size="sm" icon={FileText}>
-                              View Details
-                            </Button>
-                          </div>
-                        ) : (
-                          <Button
-                            variant="primary"
-                            onClick={() => setSelectedSubmission({
-                              studentId: student.id,
-                              studentName: student.name,
-                              assignmentId: assignment.id,
-                              assignmentTitle: assignment.title,
-                              maxPoints: assignment.points,
-                              submission: submission.content,
-                              submissionDate: submission.submissionDate
-                            })}
-                            icon={Award}
-                          >
-                            Grade Submission
-                          </Button>
-                        )}
-                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </Card>
         ))
@@ -309,9 +359,9 @@ const GradingInterface = ({ onSelectCourse }) => {
       >
         <div>
           {/* Student & Assignment Info */}
-          <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+          <div className="mb-6 p-4 bg-gradient-to-r from-primary-50 to-accent-50 rounded-xl border border-primary-200">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+              <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-lg">
                   {selectedSubmission?.studentName.charAt(0)}
                 </span>
@@ -340,7 +390,7 @@ const GradingInterface = ({ onSelectCourse }) => {
             </label>
             <div className="p-4 bg-neutral-50 border border-neutral-200 rounded-xl max-h-60 overflow-y-auto">
               <p className="text-neutral-800 whitespace-pre-wrap leading-relaxed">
-                {selectedSubmission?.submission}
+                {selectedSubmission?.submission || 'No submission content available'}
               </p>
             </div>
           </div>
@@ -364,7 +414,7 @@ const GradingInterface = ({ onSelectCourse }) => {
               <textarea
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
-                className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all resize-none"
+                className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-100 transition-all resize-none"
                 rows={5}
                 placeholder="Provide constructive feedback to help the student improve..."
               />
@@ -387,7 +437,7 @@ const GradingInterface = ({ onSelectCourse }) => {
                     key={idx}
                     type="button"
                     onClick={() => setFeedback(template)}
-                    className="px-3 py-1.5 text-xs bg-white border border-neutral-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                    className="px-3 py-1.5 text-xs bg-white border border-neutral-200 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors"
                   >
                     {template}
                   </button>
