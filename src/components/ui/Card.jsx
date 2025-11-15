@@ -7,7 +7,7 @@ export const Card = ({
   gradient = false,
   glass = false,
   padding = 'md',
-  onClick  // ✅ Add onClick prop
+  onClick  //  Add onClick prop
 }) => {
   const paddings = {
     none: '',
@@ -18,10 +18,10 @@ export const Card = ({
 
   const baseStyles = glass 
     ? 'glass shadow-lg' 
-    : 'bg-white shadow-sm border border-neutral-200';
+    : 'bg-white/90 backdrop-blur-sm shadow-sm border border-neutral-100';
   
   const hoverStyles = hover ? 'card-hover cursor-pointer' : '';
-  const gradientStyles = gradient ? 'bg-gradient-to-br from-white to-neutral-50' : '';
+  const gradientStyles = gradient ? 'bg-gradient-to-br from-white/95 to-neutral-50/80' : '';
 
   return (
     <div 

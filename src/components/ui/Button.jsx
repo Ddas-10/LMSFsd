@@ -13,12 +13,12 @@ export const Button = ({
   loading = false
 }) => {
   const variants = {
-    primary: 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md hover:shadow-lg',
-    secondary: 'bg-white border-2 border-neutral-300 hover:border-neutral-400 text-neutral-700 hover:bg-neutral-50',
-    danger: 'bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-md',
-    success: 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-md',
-    ghost: 'hover:bg-neutral-100 text-neutral-700',
-    outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50'
+    primary: 'bg-gradient-to-r from-blue-400 to-indigo-400 hover:from-blue-500 hover:to-indigo-500 text-white shadow-md hover:shadow-xl',
+    secondary: 'bg-white/80 backdrop-blur-sm border border-neutral-200 hover:border-neutral-300 text-neutral-600 hover:bg-white/90',
+    danger: 'bg-gradient-to-r from-red-400 to-rose-400 hover:from-red-500 hover:to-rose-500 text-white shadow-md',
+    success: 'bg-gradient-to-r from-green-400 to-emerald-400 hover:from-green-500 hover:to-emerald-500 text-white shadow-md',
+    ghost: 'hover:bg-neutral-50/80 text-neutral-600',
+    outline: 'border border-blue-400 text-blue-500 hover:bg-blue-50/50 backdrop-blur-sm'
   };
 
   const sizes = {

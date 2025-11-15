@@ -7,13 +7,13 @@ export const Badge = ({
   className = '' 
 }) => {
   const variants = {
-    default: 'bg-neutral-100 text-neutral-700 border-neutral-200',
-    success: 'bg-green-50 text-green-700 border-green-200',
-    warning: 'bg-amber-50 text-amber-700 border-amber-200',
-    danger: 'bg-red-50 text-red-700 border-red-200',
-    info: 'bg-blue-50 text-blue-700 border-blue-200',
-    purple: 'bg-purple-50 text-purple-700 border-purple-200',
-    primary: 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent'
+    default: 'bg-neutral-50/80 text-neutral-600 border-neutral-100',
+    success: 'bg-green-50/80 text-green-600 border-green-100',
+    warning: 'bg-amber-50/80 text-amber-600 border-amber-100',
+    danger: 'bg-rose-50/80 text-rose-600 border-rose-100',
+    info: 'bg-blue-50/80 text-blue-600 border-blue-100',
+    purple: 'bg-purple-50/80 text-purple-600 border-purple-100',
+    primary: 'bg-gradient-to-r from-blue-400 to-indigo-400 text-white border-transparent shadow-sm'
   };
 
   const sizes = {
@@ -28,6 +28,7 @@ export const Badge = ({
       rounded-full 
       border 
       font-semibold 
+      backdrop-blur-sm
       ${variants[variant]} 
       ${sizes[size]} 
       ${className}
