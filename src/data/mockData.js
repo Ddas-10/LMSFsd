@@ -46,7 +46,7 @@ export const MOCK_COURSES = [
     instructor: 'Dr. Chirag Mittal',
     duration: '8 weeks',
     level: 'Beginner',
-    thumbnail: '⚛️',
+    thumbnail: '',
     modules: [
       { 
         id: 1, 
@@ -95,7 +95,7 @@ export const MOCK_COURSES = [
     instructor: 'Dr. Siddharth',
     duration: '10 weeks',
     level: 'Advanced',
-    thumbnail: '🚀',
+    thumbnail: '',
     modules: [
       { 
         id: 1, 
@@ -129,7 +129,7 @@ export const MOCK_COURSES = [
     instructor: 'Dr. Manjunath',
     duration: '12 weeks',
     level: 'Intermediate',
-    thumbnail: '💻',
+    thumbnail: '',
     modules: [
       { 
         id: 1, 

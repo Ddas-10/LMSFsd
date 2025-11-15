@@ -4,78 +4,37 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class', // This is CRITICAL - enables dark mode with .dark class
   theme: {
     extend: {
       colors: {
-        neutral: {
-          50: '#fafafa',
-          100: '#f5f5f5',
-          200: '#e5e5e5',
-          300: '#d4d4d4',
-          400: '#a3a3a3',
-          500: '#737373',
-          600: '#525252',
-          700: '#404040',
-          800: '#262626',
-          900: '#171717',
-        }
+        // Light mode colors
+        'light-primary': '#F5F3EF',
+        'light-card': '#FFFFFF',
+        'light-section': '#EFEAE5',
+        'light-border': '#E5E0DA',
+        'light-text-primary': '#2C2C2C',
+        'light-text-secondary': '#6B6B6B',
+        'light-accent-primary': '#6B5B95',
+        'light-accent-secondary': '#9A8C98',
+        'light-accent-hover': '#7E6CC6',
+        
+        // Dark mode colors
+        'dark-primary': '#1C1B22',
+        'dark-card': '#23222A',
+        'dark-section': '#1A1A21',
+        'dark-border': '#2E2D36',
+        'dark-text-primary': '#E8E6EB',
+        'dark-text-secondary': '#A1A0A8',
+        'dark-accent-primary': '#8B7FD0',
+        'dark-accent-secondary': '#A499D9',
+        'dark-accent-hover': '#B3A8F2',
       },
       fontFamily: {
-        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
+        heading: ['Poppins', 'sans-serif'],
       },
-      boxShadow: {
-        'sm': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-        'DEFAULT': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-        'md': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-        'lg': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-        'xl': '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-        '2xl': '0 25px 50px -12px rgb(0 0 0 / 0.25)',
-      },
-      animation: {
-        'float': 'float 6s ease-in-out infinite',
-        'shimmer': 'shimmer 2s infinite',
-        'gradient': 'gradient 8s ease infinite',
-      },
-      keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
-        },
-        shimmer: {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(100%)' },
-        },
-        gradient: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        }
-      }
     },
   },
-  plugins: [
-    // Add line-clamp plugin inline
-    function({ addUtilities }) {
-      const newUtilities = {
-        '.line-clamp-1': {
-          overflow: 'hidden',
-          display: '-webkit-box',
-          '-webkit-box-orient': 'vertical',
-          '-webkit-line-clamp': '1',
-        },
-        '.line-clamp-2': {
-          overflow: 'hidden',
-          display: '-webkit-box',
-          '-webkit-box-orient': 'vertical',
-          '-webkit-line-clamp': '2',
-        },
-        '.line-clamp-3': {
-          overflow: 'hidden',
-          display: '-webkit-box',
-          '-webkit-box-orient': 'vertical',
-          '-webkit-line-clamp': '3',
-        },
-      }
-      addUtilities(newUtilities)
-    }
-  ],
+  plugins: [],
 }

@@ -25,10 +25,11 @@ const LoginPage = ({ onLoginSuccess }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-neutral-900 dark:via-neutral-900 dark:to-neutral-900 flex">
+      
       {/* Left Side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 p-12 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzBoLTZ2LTZoNnYtem0wIDBIMzB2NmgtNnYtNnptMCAwaDZ2LTZoLTZ2NnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-20"></div>
+        <div className="absolute inset-0 opacity-20"></div>
         
         <div className="relative z-10 flex flex-col justify-between w-full">
           <div>
@@ -74,12 +75,16 @@ const LoginPage = ({ onLoginSuccess }) => {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           <Card className="shadow-2xl border-0" padding="lg">
+            
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl mb-4">
                 <GraduationCap size={32} className="text-white" />
               </div>
-              <h2 className="text-3xl font-bold text-neutral-900 mb-2">Welcome Back</h2>
-              <p className="text-neutral-600">Sign in to continue your learning journey</p>
+
+              <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-2">Welcome Back</h2>
+              <p className="text-neutral-600 dark:text-neutral-300">
+                Sign in to continue your learning journey
+              </p>
             </div>
 
             {error && (
@@ -97,6 +102,7 @@ const LoginPage = ({ onLoginSuccess }) => {
                 placeholder="Enter your username"
                 icon={Mail}
               />
+
               <Input
                 label="Password"
                 type="password"
@@ -119,22 +125,29 @@ const LoginPage = ({ onLoginSuccess }) => {
               </Button>
             </form>
 
-            <div className="mt-8 p-5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-              <p className="text-sm font-semibold text-neutral-700 mb-3">Demo Credentials</p>
+            {/* Demo Credentials */}
+            <div className="mt-8 p-5 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-neutral-800 dark:to-neutral-700 rounded-xl border border-blue-100 dark:border-neutral-700">
+              <p className="text-sm font-semibold text-neutral-700 dark:text-neutral-200 mb-3">
+                Demo Credentials
+              </p>
+
               <div className="space-y-2 text-sm">
-                <div className="flex items-center justify-between p-2 bg-white rounded-lg">
-                  <span className="text-neutral-600">👨‍🎓 Student</span>
-                  <code className="text-blue-600 font-mono">student1 / pass123</code>
+                <div className="flex items-center justify-between p-2 bg-white dark:bg-neutral-800 rounded-lg">
+                  <span className="text-neutral-600 dark:text-neutral-300">Student</span>
+                  <code className="text-blue-600 dark:text-blue-400 font-mono">student1 / pass123</code>
                 </div>
-                <div className="flex items-center justify-between p-2 bg-white rounded-lg">
-                  <span className="text-neutral-600">👨‍🏫 Teacher</span>
-                  <code className="text-blue-600 font-mono">teacher1 / pass123</code>
+
+                <div className="flex items-center justify-between p-2 bg-white dark:bg-neutral-800 rounded-lg">
+                  <span className="text-neutral-600 dark:text-neutral-300">Teacher</span>
+                  <code className="text-blue-600 dark:text-blue-400 font-mono">teacher1 / pass123</code>
                 </div>
               </div>
             </div>
+
           </Card>
         </div>
       </div>
+
     </div>
   );
 };

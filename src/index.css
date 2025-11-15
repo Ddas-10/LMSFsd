@@ -1,88 +1,476 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
 @layer base {
+  :root {
+    /* Light mode colors - "Warm Minimal Beige" */
+    --bg-primary: #F5F3EF;        /* Soft Linen */
+    --bg-card: #FFFFFF;            /* Pure Porcelain */
+    --accent-primary: #6B5B95;     /* Royal Mauve */
+    --accent-secondary: #9A8C98;   /* Dusty Lavender */
+    --accent-hover: #7E6CC6;       /* Twilight Violet */
+    --text-primary: #2C2C2C;       /* Deep Charcoal */
+    --text-secondary: #6B6B6B;     /* Warm Ash */
+    --border-color: #E5E0DA;       /* Neutral Sand */
+    --section-bg: #EFEAE5;         /* Gentle Ivory */
+  }
+
+  .dark {
+    /* Dark mode colors - "Velvet Night" */
+    --bg-primary: #1C1B22;         /* Nocturne Black */
+    --bg-card: #23222A;            /* Obsidian Slate */
+    --accent-primary: #8B7FD0;     /* Velvet Indigo */
+    --accent-secondary: #A499D9;   /* Soft Amethyst */
+    --accent-hover: #B3A8F2;       /* Lavender Glow */
+    --text-primary: #E8E6EB;       /* Pearl Mist */
+    --text-secondary: #A1A0A8;     /* Silver Fog */
+    --border-color: #2E2D36;       /* Shadow Line */
+    --section-bg: #1A1A21;         /* Midnight Veil */
+  }
+
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
-  
+
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: #fafafa;
-    color: #171717;
+    background: var(--bg-primary);
+    background-attachment: fixed;
+    color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
   }
 }
 
 @layer components {
+  /* Enhanced Text Gradient for Headers */
   .text-gradient {
-    background: linear-gradient(to right, #2563eb, #4f46e5, #7c3aed);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    font-weight: 700;
   }
-  
+
+  .text-gradient-alt {
+    background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 700;
+  }
+
+  /* Elevated Card Hover Effect */
   .card-hover {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+  }
+
+  .card-hover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px -12px rgba(107, 91, 149, 0.3);
+  }
+
+  .card-hover:hover::before {
+    opacity: 1;
+  }
+
+  /* Professional Glass Effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+
+  .glass-dark {
+    background: rgba(28, 27, 34, 0.9);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-color);
+  }
+
+  /* Study Progress Indicators */
+  .progress-ring {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+  }
+
+  .progress-ring-circle {
+    transition: stroke-dashoffset 0.6s ease;
+    stroke-linecap: round;
+    stroke: var(--accent-primary);
+  }
+
+  /* Academic Stats Card */
+  .stat-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
     transition: all 0.3s ease;
   }
-  
-  .card-hover:hover {
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-    transform: translateY(-4px);
+
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(107, 91, 149, 0.1) 0%, transparent 70%);
+    transform: translate(30%, -30%);
   }
-  
-  .glass {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -8px rgba(107, 91, 149, 0.25);
+  }
+
+  /* Course Card Enhanced */
+  .course-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .course-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .course-card:hover {
+    border-color: var(--accent-primary);
+  }
+
+  .course-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  /* Achievement Badge */
+  .achievement-badge {
+    position: relative;
+    display: inline-flex;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    box-shadow: 0 4px 12px rgba(107, 91, 149, 0.3);
+  }
+
+  /* Study Streak Counter */
+  .streak-counter {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(107, 91, 149, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Navigation Active State */
+  .nav-active {
+    position: relative;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+  }
+
+  .nav-active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 3px;
+    background: white;
+    border-radius: 2px 2px 0 0;
+  }
+
+  /* Button Styles */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(107, 91, 149, 0.3);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--accent-hover), var(--accent-secondary));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(107, 91, 149, 0.4);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--accent-primary);
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 2px solid var(--accent-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-secondary:hover {
+    background: var(--accent-primary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* Performance Metric */
+  .metric-good {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  .metric-average {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+
+  .metric-needs-work {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 600;
   }
 }
 
 @layer utilities {
+  /* Floating Animation for Hero Elements */
   .animate-float {
-    animation: float 6s ease-in-out infinite;
+    animation: float 8s ease-in-out infinite;
   }
-  
+
   @keyframes float {
-    0%, 100% { 
-      transform: translateY(0px); 
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
     }
-    50% { 
-      transform: translateY(-20px); 
+    25% {
+      transform: translateY(-10px) rotate(1deg);
+    }
+    75% {
+      transform: translateY(-15px) rotate(-1deg);
     }
   }
-  
+
+  .animate-float-delayed {
+    animation: float 8s ease-in-out 2s infinite;
+  }
+
+  /* Shimmer Effect for Progress Bars */
   .animate-shimmer {
-    animation: shimmer 2s infinite;
+    animation: shimmer 2.5s infinite linear;
   }
-  
+
   @keyframes shimmer {
     0% {
       transform: translateX(-100%);
     }
     100% {
-      transform: translateX(100%);
+      transform: translateX(200%);
     }
   }
-  
+
+  /* Pulse Animation for Notifications */
+  .animate-pulse-soft {
+    animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-soft {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+
+  /* Gradient Animation */
   .animate-gradient {
     background-size: 200% 200%;
-    animation: gradient 8s ease infinite;
+    animation: gradient 6s ease infinite;
   }
-  
+
   @keyframes gradient {
-    0%, 100% { 
-      background-position: 0% 50%; 
+    0%, 100% {
+      background-position: 0% 50%;
     }
-    50% { 
-      background-position: 100% 50%; 
+    50% {
+      background-position: 100% 50%;
     }
+  }
+
+  /* Slide In Animations */
+  .slide-in-bottom {
+    animation: slideInBottom 0.5s ease-out;
+  }
+
+  @keyframes slideInBottom {
+    from {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .slide-in-left {
+    animation: slideInLeft 0.5s ease-out;
+  }
+
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(-30px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  /* Study Focus Mode */
+  .focus-mode {
+    filter: grayscale(0.3) contrast(1.1);
+    transition: filter 0.3s ease;
+  }
+
+  .focus-mode:hover {
+    filter: grayscale(0) contrast(1);
+  }
+
+  /* Progress Indicator Styles */
+  .progress-excellent {
+    background: linear-gradient(90deg, #10b981, #059669);
+  }
+
+  .progress-good {
+    background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  }
+
+  .progress-average {
+    background: linear-gradient(90deg, #f59e0b, #d97706);
+  }
+
+  .progress-poor {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+  }
+
+  /* Custom Scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: var(--section-bg);
+    border-radius: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 4px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--accent-hover), var(--accent-secondary));
+  }
+
+  /* Background utilities */
+  .bg-primary {
+    background-color: var(--bg-primary);
+  }
+
+  .bg-card {
+    background-color: var(--bg-card);
+  }
+
+  .bg-section {
+    background-color: var(--section-bg);
+  }
+
+  /* Text utilities */
+  .text-primary {
+    color: var(--text-primary);
+  }
+
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+
+  .text-accent {
+    color: var(--accent-primary);
+  }
+
+  /* Border utilities */
+  .border-custom {
+    border-color: var(--border-color);
+  }
+
+  /* Accent gradient background */
+  .bg-accent-gradient {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
   }
 }

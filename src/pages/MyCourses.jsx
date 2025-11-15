@@ -37,9 +37,9 @@ const MyCourses = ({ onSelectCourse }) => {
     return (
       <div className="text-center py-20">
         <Card className="max-w-2xl mx-auto">
-          <BookOpen size={80} className="mx-auto text-neutral-300 mb-6" />
-          <h2 className="text-3xl font-bold text-neutral-900 mb-4">No Courses Yet</h2>
-          <p className="text-neutral-600 text-lg mb-8">
+          <BookOpen size={80} className="mx-auto text-neutral-300 dark:text-neutral-600 mb-6" />
+          <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">No Courses Yet</h2>
+          <p className="text-neutral-600 dark:text-neutral-300 text-lg mb-8">
             Start your learning journey by exploring our course catalog
           </p>
           <Button variant="primary" size="lg">
@@ -55,8 +55,8 @@ const MyCourses = ({ onSelectCourse }) => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-neutral-900 mb-2">My Learning</h1>
-          <p className="text-neutral-600 text-lg">Continue where you left off</p>
+          <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-2">My Learning</h1>
+          <p className="text-neutral-600 dark:text-neutral-300 text-lg">Continue where you left off</p>
         </div>
         <Button variant="ghost" icon={Target}>
           Learning Goals
@@ -67,44 +67,45 @@ const MyCourses = ({ onSelectCourse }) => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="bg-gradient-to-br from-primary-50 to-accent-50 border-primary-200">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-neutral-700">In Progress</h3>
+            <h3 className="font-semibold text-neutral-700 dark:text-neutral-200">In Progress</h3>
             <TrendingUp className="text-primary-600" size={20} />
           </div>
-          <p className="text-4xl font-bold text-neutral-900">
+          <p className="text-4xl font-bold text-neutral-900 dark:text-white">
             {user.enrolledCourses?.filter(id => {
               const progress = user.progress[id] || 0;
               return progress > 0 && progress < 100;
             }).length || 0}
           </p>
-          <p className="text-sm text-neutral-600 mt-2">Active courses</p>
+          <p className="text-sm text-neutral-600 dark:text-neutral-300 mt-2">Active courses</p>
         </Card>
 
         <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-neutral-700">Completed</h3>
+            <h3 className="font-semibold text-neutral-700 dark:text-neutral-200">Completed</h3>
             <Target className="text-green-600" size={20} />
           </div>
-          <p className="text-4xl font-bold text-neutral-900">
+          <p className="text-4xl font-bold text-neutral-900 dark:text-white">
             {user.enrolledCourses?.filter(id => user.progress[id] === 100).length || 0}
           </p>
-          <p className="text-sm text-neutral-600 mt-2">Finished courses</p>
+          <p className="text-sm text-neutral-600 dark:text-neutral-300 mt-2">Finished courses</p>
         </Card>
 
         <Card className="bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-neutral-700">Not Started</h3>
+            <h3 className="font-semibold text-neutral-700 dark:text-neutral-200">Not Started</h3>
             <Clock className="text-amber-600" size={20} />
           </div>
-          <p className="text-4xl font-bold text-neutral-900">
+          <p className="text-4xl font-bold text-neutral-900 dark:text-white">
             {user.enrolledCourses?.filter(id => !user.progress[id] || user.progress[id] === 0).length || 0}
           </p>
-          <p className="text-sm text-neutral-600 mt-2">Ready to begin</p>
+          <p className="text-sm text-neutral-600 dark:text-neutral-300 mt-2">Ready to begin</p>
         </Card>
       </div>
 
       {/* Courses Grid */}
       <div>
-        <h2 className="text-2xl font-bold text-neutral-900 mb-6">All Courses</h2>
+        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">All Courses</h2>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {courses.map(course => {
             const progress = user.progress[course.id] || 0;
@@ -120,20 +121,25 @@ const MyCourses = ({ onSelectCourse }) => {
                   <div className="w-24 h-24 bg-gradient-to-br from-primary-100 to-accent-100 rounded-2xl flex items-center justify-center text-5xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                     {course.thumbnail}
                   </div>
+
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-bold text-xl text-neutral-900 group-hover:text-primary-600 transition-colors">
+                      <h3 className="font-bold text-xl text-neutral-900 dark:text-white group-hover:text-primary-600 transition-colors">
                         {course.title}
                       </h3>
+
                       <Badge variant={progress >= 75 ? 'success' : 'default'}>
                         {course.level}
                       </Badge>
                     </div>
-                    <p className="text-sm text-neutral-500 mb-3">{course.instructor}</p>
+
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+                      {course.instructor}
+                    </p>
                   </div>
                 </div>
 
-                <p className="text-neutral-600 text-sm mb-4 line-clamp-2">
+                <p className="text-neutral-600 dark:text-neutral-300 text-sm mb-4 line-clamp-2">
                   {course.description}
                 </p>
 
@@ -144,8 +150,8 @@ const MyCourses = ({ onSelectCourse }) => {
                   className="mb-4"
                 />
 
-                <div className="flex items-center justify-between pt-4 border-t border-neutral-100">
-                  <div className="flex items-center gap-4 text-xs text-neutral-500">
+                <div className="flex items-center justify-between pt-4 border-t border-neutral-100 dark:border-neutral-700">
+                  <div className="flex items-center gap-4 text-xs text-neutral-500 dark:text-neutral-400">
                     <span className="flex items-center gap-1">
                       <BookOpen size={14} />
                       {course.modules.length} modules
@@ -155,6 +161,7 @@ const MyCourses = ({ onSelectCourse }) => {
                       {course.duration}
                     </span>
                   </div>
+
                   <Button variant="ghost" size="sm" icon={ArrowRight}>
                     Continue
                   </Button>

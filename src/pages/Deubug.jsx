@@ -23,24 +23,39 @@ const DebugPage = () => {
   return (
     <div className="space-y-6">
       <Card>
-        <h2 className="text-2xl font-bold mb-4">Debug Information</h2>
+        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
+          Debug Information
+        </h2>
+
         <div className="space-y-4">
+          {/* USERS */}
           <div>
-            <h3 className="font-bold mb-2">Users in Storage:</h3>
-            <pre className="bg-neutral-100 p-4 rounded overflow-auto text-xs">
+            <h3 className="font-bold text-neutral-800 dark:text-neutral-200 mb-2">
+              Users in Storage:
+            </h3>
+
+            <pre className="bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-100 p-4 rounded overflow-auto text-xs">
               {JSON.stringify(users, null, 2)}
             </pre>
           </div>
+
+          {/* COURSES */}
           <div>
-            <h3 className="font-bold mb-2">Courses in Storage:</h3>
-            <pre className="bg-neutral-100 p-4 rounded overflow-auto text-xs">
+            <h3 className="font-bold text-neutral-800 dark:text-neutral-200 mb-2">
+              Courses in Storage:
+            </h3>
+
+            <pre className="bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-100 p-4 rounded overflow-auto text-xs">
               {JSON.stringify(courses, null, 2)}
             </pre>
           </div>
+
+          {/* BUTTONS */}
           <div className="flex gap-3">
             <Button variant="danger" onClick={resetData}>
               Reset All Data
             </Button>
+
             <Button variant="primary" onClick={initData}>
               Initialize Data
             </Button>

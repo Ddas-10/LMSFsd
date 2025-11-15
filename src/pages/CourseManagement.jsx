@@ -1,3 +1,4 @@
+// ========== CourseManagement.jsx ==========
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { ApiService } from '../services/api';
@@ -15,7 +16,7 @@ const CourseManagement = () => {
     description: '',
     level: 'Beginner',
     duration: '',
-    thumbnail: '📚'
+    thumbnail: ''
   });
 
   useEffect(() => {
@@ -50,7 +51,7 @@ const CourseManagement = () => {
         description: '',
         level: 'Beginner',
         duration: '',
-        thumbnail: '📚'
+        thumbnail: ''
       });
       loadCourses();
       alert('Course created successfully!');
@@ -76,14 +77,14 @@ const CourseManagement = () => {
     course.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const emojiOptions = ['📚', '💻', '🎨', '🔬', '📊', '🎯', '🚀', '⚛️', '🎓', '💡'];
+  const emojiOptions = [];
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-neutral-600 font-medium">Loading courses...</p>
+          <p className="text-neutral-600 dark:text-neutral-300 font-medium">Loading courses...</p>
         </div>
       </div>
     );
@@ -94,8 +95,8 @@ const CourseManagement = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-neutral-900 mb-2">Course Management</h1>
-          <p className="text-neutral-600 text-lg">Create and manage your courses</p>
+          <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-2">Course Management</h1>
+          <p className="text-neutral-600 dark:text-neutral-300 text-lg">Create and manage your courses</p>
         </div>
         <Button
           variant="primary"
@@ -110,13 +111,13 @@ const CourseManagement = () => {
       {/* Search */}
       <Card>
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400" size={20} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 dark:text-neutral-500" size={20} />
           <input
             type="text"
             placeholder="Search courses..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all"
+            className="w-full pl-12 pr-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/50 transition-all"
           />
         </div>
       </Card>
@@ -126,7 +127,7 @@ const CourseManagement = () => {
         {filteredCourses.map(course => (
           <Card key={course.id} hover className="flex flex-col">
             {/* Course Header */}
-            <div className="relative h-32 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl mb-4 flex items-center justify-center">
+            <div className="relative h-32 bg-gradient-to-br from-blue-100 to-indigo-100 dark:from-blue-900/30 dark:to-indigo-900/30 rounded-xl mb-4 flex items-center justify-center">
               <span className="text-6xl">{course.thumbnail}</span>
             </div>
 
@@ -134,21 +135,21 @@ const CourseManagement = () => {
             <div className="flex-1 flex flex-col">
               <div className="mb-4">
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-bold text-xl text-neutral-900 line-clamp-2">
+                  <h3 className="font-bold text-xl text-neutral-900 dark:text-white line-clamp-2">
                     {course.title}
                   </h3>
                   <Badge size="sm">{course.level}</Badge>
                 </div>
-                <p className="text-neutral-600 text-sm line-clamp-2 mb-3">
+                <p className="text-neutral-600 dark:text-neutral-300 text-sm line-clamp-2 mb-3">
                   {course.description}
                 </p>
-                <div className="flex items-center gap-2 text-xs text-neutral-500 mb-2">
+                <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 mb-2">
                   <Badge variant="info" size="sm">{course.duration}</Badge>
                 </div>
               </div>
 
               {/* Course Stats */}
-              <div className="flex flex-wrap gap-3 mb-4 text-xs text-neutral-600">
+              <div className="flex flex-wrap gap-3 mb-4 text-xs text-neutral-600 dark:text-neutral-400">
                 <span className="flex items-center gap-1">
                   <Users size={14} />
                   {course.enrolledStudents.length} students
@@ -164,7 +165,7 @@ const CourseManagement = () => {
               </div>
 
               {/* Actions */}
-              <div className="flex gap-2 pt-4 border-t border-neutral-100">
+              <div className="flex gap-2 pt-4 border-t border-neutral-100 dark:border-neutral-700">
                 <Button variant="outline" icon={Edit} className="flex-1 justify-center" size="sm">
                   Edit
                 </Button>
@@ -184,9 +185,9 @@ const CourseManagement = () => {
 
       {filteredCourses.length === 0 && (
         <Card className="text-center py-16">
-          <BookOpen size={64} className="mx-auto text-neutral-300 mb-4" />
-          <h3 className="text-xl font-semibold text-neutral-700 mb-2">No courses found</h3>
-          <p className="text-neutral-500 mb-6">
+          <BookOpen size={64} className="mx-auto text-neutral-300 dark:text-neutral-600 mb-4" />
+          <h3 className="text-xl font-semibold text-neutral-700 dark:text-neutral-200 mb-2">No courses found</h3>
+          <p className="text-neutral-500 dark:text-neutral-400 mb-6">
             {searchTerm ? 'Try adjusting your search' : 'Start by creating your first course'}
           </p>
           {!searchTerm && (
@@ -207,7 +208,7 @@ const CourseManagement = () => {
             description: '',
             level: 'Beginner',
             duration: '',
-            thumbnail: '📚'
+            thumbnail: ''
           });
         }}
         title="Create New Course"
@@ -222,13 +223,13 @@ const CourseManagement = () => {
           />
           
           <div className="mb-5">
-            <label className="block text-sm font-semibold text-neutral-700 mb-2">
+            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-200 mb-2">
               Description <span className="text-red-500">*</span>
             </label>
             <textarea
               value={newCourse.description}
               onChange={(e) => setNewCourse({ ...newCourse, description: e.target.value })}
-              className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all resize-none"
+              className="w-full px-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/50 transition-all resize-none"
               rows={4}
               placeholder="Describe what students will learn in this course..."
             />
@@ -236,13 +237,13 @@ const CourseManagement = () => {
 
           <div className="grid grid-cols-2 gap-4 mb-5">
             <div>
-              <label className="block text-sm font-semibold text-neutral-700 mb-2">
+              <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-200 mb-2">
                 Level
               </label>
               <select
                 value={newCourse.level}
                 onChange={(e) => setNewCourse({ ...newCourse, level: e.target.value })}
-                className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all bg-white"
+                className="w-full px-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/50 transition-all"
               >
                 <option>Beginner</option>
                 <option>Intermediate</option>
@@ -259,7 +260,7 @@ const CourseManagement = () => {
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-neutral-700 mb-3">
+            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-200 mb-3">
               Course Icon
             </label>
             <div className="grid grid-cols-5 gap-3">
@@ -270,8 +271,8 @@ const CourseManagement = () => {
                   onClick={() => setNewCourse({ ...newCourse, thumbnail: emoji })}
                   className={`p-4 text-3xl rounded-xl border-2 transition-all hover:scale-110 ${
                     newCourse.thumbnail === emoji
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-neutral-200 hover:border-blue-300'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
+                      : 'border-neutral-200 dark:border-neutral-700 hover:border-blue-300 dark:hover:border-blue-600'
                   }`}
                 >
                   {emoji}
@@ -298,7 +299,7 @@ const CourseManagement = () => {
                   description: '',
                   level: 'Beginner',
                   duration: '',
-                  thumbnail: '📚'
+                  thumbnail: ''
                 });
               }}
               size="lg"

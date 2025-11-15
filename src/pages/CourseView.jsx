@@ -24,7 +24,6 @@ const CourseView = ({ courseId }) => {
     try {
       const courseData = await ApiService.fetchCourseById(courseId);
       setCourse(courseData);
-      // Expand first module by default
       setExpandedModules({ [courseData.modules[0]?.id]: true });
     } catch (err) {
       console.error('Failed to load course:', err);
@@ -33,46 +32,44 @@ const CourseView = ({ courseId }) => {
     }
   };
 
-  // At the top of CourseView.jsx, update the handleModuleComplete function:
+  const handleModuleComplete = async (moduleId) => {
+    const moduleIndex = course.modules.findIndex(m => m.id === moduleId);
+    const progress = Math.round(((moduleIndex + 1) / course.modules.length) * 100);
+    
+    try {
+      const updatedUser = await ApiService.updateProgress(user.id, courseId, progress);
+      updateUser(updatedUser);
+      alert(`Module completed! Your progress is now ${progress}%`);
+    } catch (err) {
+      console.error('Failed to update progress:', err);
+      alert('Failed to update progress. Please try again.');
+    }
+  };
 
-const handleModuleComplete = async (moduleId) => {
-  const moduleIndex = course.modules.findIndex(m => m.id === moduleId);
-  const progress = Math.round(((moduleIndex + 1) / course.modules.length) * 100);
-  
-  try {
-    const updatedUser = await ApiService.updateProgress(user.id, courseId, progress);
-    updateUser(updatedUser);
-    alert(`Module completed! Your progress is now ${progress}%`);
-  } catch (err) {
-    console.error('Failed to update progress:', err);
-    alert('Failed to update progress. Please try again.');
-  }
-};
+  const handleSubmitAssignment = async () => {
+    if (!submissionText.trim()) {
+      alert('Please enter your submission');
+      return;
+    }
 
-const handleSubmitAssignment = async () => {
-  if (!submissionText.trim()) {
-    alert('Please enter your submission');
-    return;
-  }
-
-  setSubmitting(true);
-  try {
-    const updatedUser = await ApiService.submitAssignment(
-      user.id,
-      courseId,
-      selectedAssignment.id,
-      submissionText
-    );
-    updateUser(updatedUser);
-    setSubmissionText('');
-    setSelectedSubmission(null);
-    alert('Assignment submitted successfully!');
-  } catch (err) {
-    alert('Submission failed: ' + err.message);
-  } finally {
-    setSubmitting(false);
-  }
-};
+    setSubmitting(true);
+    try {
+      const updatedUser = await ApiService.submitAssignment(
+        user.id,
+        courseId,
+        selectedAssignment.id,
+        submissionText
+      );
+      updateUser(updatedUser);
+      setSubmissionText('');
+      setSelectedAssignment(null);
+      alert('Assignment submitted successfully!');
+    } catch (err) {
+      alert('Submission failed: ' + err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const toggleModule = (moduleId) => {
     setExpandedModules(prev => ({
@@ -86,7 +83,7 @@ const handleSubmitAssignment = async () => {
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-neutral-600 font-medium">Loading course...</p>
+          <p className="text-neutral-600 dark:text-neutral-300 font-medium">Loading course...</p>
         </div>
       </div>
     );
@@ -96,8 +93,8 @@ const handleSubmitAssignment = async () => {
     return (
       <Card className="text-center py-20">
         <AlertCircle size={64} className="mx-auto text-red-400 mb-4" />
-        <h2 className="text-2xl font-bold text-neutral-900 mb-2">Course Not Found</h2>
-        <p className="text-neutral-600">The course you're looking for doesn't exist.</p>
+        <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">Course Not Found</h2>
+        <p className="text-neutral-600 dark:text-neutral-300">The course you're looking for doesn't exist.</p>
       </Card>
     );
   }
@@ -144,7 +141,7 @@ const handleSubmitAssignment = async () => {
       {/* Progress Card */}
       <Card>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold text-neutral-900">Your Progress</h2>
+          <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Your Progress</h2>
           <Badge variant={progress === 100 ? 'success' : 'info'} size="lg">
             {progress === 100 ? 'Completed' : 'In Progress'}
           </Badge>
@@ -161,31 +158,31 @@ const handleSubmitAssignment = async () => {
         <div className="lg:col-span-2 space-y-6">
           {/* Course Modules */}
           <Card>
-            <h2 className="text-2xl font-bold text-neutral-900 mb-6">Course Content</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">Course Content</h2>
             <div className="space-y-3">
               {course.modules.map((module, index) => {
                 const isExpanded = expandedModules[module.id];
                 const isCompleted = progress >= ((index + 1) / course.modules.length) * 100;
 
                 return (
-                  <div key={module.id} className="border-2 border-neutral-200 rounded-xl overflow-hidden hover:border-blue-300 transition-colors">
+                  <div key={module.id} className="border-2 border-neutral-200 dark:border-neutral-700 rounded-xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
                     <button
                       onClick={() => toggleModule(module.id)}
-                      className="w-full px-6 py-4 flex items-center justify-between bg-gradient-to-r from-neutral-50 to-white hover:from-blue-50 hover:to-indigo-50 transition-colors"
+                      className="w-full px-6 py-4 flex items-center justify-between bg-gradient-to-r from-neutral-50 to-white dark:from-neutral-800 dark:to-neutral-800 hover:from-blue-50 hover:to-indigo-50 dark:hover:from-blue-900/20 dark:hover:to-indigo-900/20 transition-colors"
                     >
                       <div className="flex items-center gap-4">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
                           isCompleted 
                             ? 'bg-green-500 text-white' 
-                            : 'bg-neutral-200 text-neutral-600'
+                            : 'bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300'
                         }`}>
                           {isCompleted ? <CheckCircle size={20} /> : index + 1}
                         </div>
                         <div className="text-left">
-                          <h3 className="font-bold text-lg text-neutral-900">
+                          <h3 className="font-bold text-lg text-neutral-900 dark:text-white">
                             {module.title}
                           </h3>
-                          <p className="text-sm text-neutral-500">{module.duration}</p>
+                          <p className="text-sm text-neutral-500 dark:text-neutral-400">{module.duration}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
@@ -194,13 +191,13 @@ const handleSubmitAssignment = async () => {
                             Completed
                           </Badge>
                         )}
-                        {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                        <ChevronDown size={20} className={`text-neutral-600 dark:text-neutral-300 ${isExpanded ? 'rotate-180' : ''} transition-transform`} />
                       </div>
                     </button>
 
                     {isExpanded && (
-                      <div className="px-6 py-5 bg-white border-t-2 border-neutral-100">
-                        <p className="text-neutral-700 mb-6 leading-relaxed">
+                      <div className="px-6 py-5 bg-white dark:bg-neutral-800 border-t-2 border-neutral-100 dark:border-neutral-700">
+                        <p className="text-neutral-700 dark:text-neutral-300 mb-6 leading-relaxed">
                           {module.content}
                         </p>
                         <div className="flex gap-3">
@@ -231,11 +228,11 @@ const handleSubmitAssignment = async () => {
 
           {/* Assignments */}
           <Card>
-            <h2 className="text-2xl font-bold text-neutral-900 mb-6">Assignments</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6">Assignments</h2>
             {course.assignments.length === 0 ? (
               <div className="text-center py-8">
-                <FileText size={48} className="mx-auto text-neutral-300 mb-3" />
-                <p className="text-neutral-600">No assignments for this course yet</p>
+                <FileText size={48} className="mx-auto text-neutral-300 dark:text-neutral-600 mb-3" />
+                <p className="text-neutral-600 dark:text-neutral-400">No assignments for this course yet</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -245,13 +242,13 @@ const handleSubmitAssignment = async () => {
                   const isGraded = submission?.grade !== null && submission?.grade !== undefined;
 
                   return (
-                    <div key={assignment.id} className="border-2 border-neutral-200 rounded-xl p-6 hover:border-blue-300 transition-colors">
+                    <div key={assignment.id} className="border-2 border-neutral-200 dark:border-neutral-700 rounded-xl p-6 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
-                          <h3 className="font-bold text-xl text-neutral-900 mb-2">
+                          <h3 className="font-bold text-xl text-neutral-900 dark:text-white mb-2">
                             {assignment.title}
                           </h3>
-                          <p className="text-neutral-600 text-sm mb-3">
+                          <p className="text-neutral-600 dark:text-neutral-300 text-sm mb-3">
                             {assignment.description}
                           </p>
                         </div>
@@ -264,7 +261,7 @@ const handleSubmitAssignment = async () => {
                       </div>
 
                       <div className="flex flex-wrap items-center gap-4 mb-4 text-sm">
-                        <span className="flex items-center gap-2 text-neutral-600">
+                        <span className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
                           <Clock size={16} />
                           Due: {new Date(assignment.dueDate).toLocaleDateString('en-US', { 
                             month: 'long', 
@@ -272,7 +269,7 @@ const handleSubmitAssignment = async () => {
                             year: 'numeric' 
                           })}
                         </span>
-                        <span className="flex items-center gap-2 text-neutral-600">
+                        <span className="flex items-center gap-2 text-neutral-600 dark:text-neutral-400">
                           <Award size={16} />
                           {assignment.points} points
                         </span>
@@ -292,19 +289,19 @@ const handleSubmitAssignment = async () => {
                           Submit Assignment
                         </Button>
                       ) : (
-                        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                        <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-4">
                           <div className="flex items-start gap-3">
-                            <CheckCircle className="text-blue-600 flex-shrink-0 mt-0.5" size={20} />
+                            <CheckCircle className="text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" size={20} />
                             <div className="flex-1">
-                              <p className="font-semibold text-blue-900 mb-1">
+                              <p className="font-semibold text-blue-900 dark:text-blue-100 mb-1">
                                 Submitted on {new Date(submission.submissionDate).toLocaleDateString()}
                               </p>
                               {submission.feedback && (
-                                <div className="mt-3 p-3 bg-white rounded-lg">
-                                  <p className="text-sm font-semibold text-neutral-900 mb-1">
+                                <div className="mt-3 p-3 bg-white dark:bg-neutral-800 rounded-lg">
+                                  <p className="text-sm font-semibold text-neutral-900 dark:text-white mb-1">
                                     Teacher Feedback:
                                   </p>
-                                  <p className="text-sm text-neutral-700">{submission.feedback}</p>
+                                  <p className="text-sm text-neutral-700 dark:text-neutral-300">{submission.feedback}</p>
                                 </div>
                               )}
                             </div>
@@ -322,22 +319,22 @@ const handleSubmitAssignment = async () => {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Course Stats */}
-          <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200">
-            <h3 className="font-bold text-lg text-neutral-900 mb-4">Course Stats</h3>
+          <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-indigo-200 dark:border-indigo-800">
+            <h3 className="font-bold text-lg text-neutral-900 dark:text-white mb-4">Course Stats</h3>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-neutral-600 text-sm">Completion</span>
-                <span className="font-bold text-neutral-900 text-lg">{progress}%</span>
+                <span className="text-neutral-600 dark:text-neutral-300 text-sm">Completion</span>
+                <span className="font-bold text-neutral-900 dark:text-white text-lg">{progress}%</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-neutral-600 text-sm">Modules Done</span>
-                <span className="font-bold text-neutral-900 text-lg">
+                <span className="text-neutral-600 dark:text-neutral-300 text-sm">Modules Done</span>
+                <span className="font-bold text-neutral-900 dark:text-white text-lg">
                   {Math.floor((progress / 100) * course.modules.length)}/{course.modules.length}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-neutral-600 text-sm">Assignments</span>
-                <span className="font-bold text-neutral-900 text-lg">
+                <span className="text-neutral-600 dark:text-neutral-300 text-sm">Assignments</span>
+                <span className="font-bold text-neutral-900 dark:text-white text-lg">
                   {Object.values(user.assignments?.[courseId] || {}).filter(a => a.submitted).length}/{course.assignments.length}
                 </span>
               </div>
@@ -346,7 +343,7 @@ const handleSubmitAssignment = async () => {
 
           {/* Quick Actions */}
           <Card>
-            <h3 className="font-bold text-lg text-neutral-900 mb-4">Quick Actions</h3>
+            <h3 className="font-bold text-lg text-neutral-900 dark:text-white mb-4">Quick Actions</h3>
             <div className="space-y-3">
               <Button variant="outline" fullWidth icon={Download}>
                 Download Materials
@@ -361,15 +358,15 @@ const handleSubmitAssignment = async () => {
           </Card>
 
           {/* Instructor Info */}
-          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-            <h3 className="font-bold text-lg text-neutral-900 mb-4">Instructor</h3>
+          <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-800">
+            <h3 className="font-bold text-lg text-neutral-900 dark:text-white mb-4">Instructor</h3>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
                 {course.instructor.charAt(0)}
               </div>
               <div>
-                <p className="font-semibold text-neutral-900">{course.instructor}</p>
-                <p className="text-sm text-neutral-600">Course Instructor</p>
+                <p className="font-semibold text-neutral-900 dark:text-white">{course.instructor}</p>
+                <p className="text-sm text-neutral-600 dark:text-neutral-400">Course Instructor</p>
               </div>
             </div>
             <Button variant="primary" fullWidth size="sm">
@@ -389,9 +386,9 @@ const handleSubmitAssignment = async () => {
         title={`Submit: ${selectedAssignment?.title}`}
       >
         <div>
-          <div className="mb-6 p-4 bg-neutral-50 rounded-xl">
-            <p className="text-neutral-700 mb-2">{selectedAssignment?.description}</p>
-            <div className="flex gap-4 text-sm text-neutral-600 mt-3">
+          <div className="mb-6 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-xl">
+            <p className="text-neutral-700 dark:text-neutral-300 mb-2">{selectedAssignment?.description}</p>
+            <div className="flex gap-4 text-sm text-neutral-600 dark:text-neutral-400 mt-3">
               <span className="flex items-center gap-1">
                 <Clock size={14} />
                 Due: {new Date(selectedAssignment?.dueDate).toLocaleDateString()}
@@ -404,17 +401,17 @@ const handleSubmitAssignment = async () => {
           </div>
 
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-neutral-700 mb-3">
+            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-200 mb-3">
               Your Submission *
             </label>
             <textarea
               value={submissionText}
               onChange={(e) => setSubmissionText(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 transition-all resize-none"
+              className="w-full px-4 py-3 border-2 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white rounded-xl focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-100 dark:focus:ring-blue-900/50 transition-all resize-none"
               rows={8}
               placeholder="Enter your assignment submission here..."
             />
-            <p className="text-xs text-neutral-500 mt-2">
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
               {submissionText.length} characters
             </p>
           </div>

@@ -1,6 +1,7 @@
 // src/App.jsx
 import React, { useEffect, useState } from 'react';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import AppContent from './components/AppContent';
 import { initializeStorage } from './utils/initStorage';
 
@@ -16,10 +17,10 @@ const App = () => {
   // Optional: Show loading screen while initializing
   if (!isReady) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/30 flex items-center justify-center">
+      <div className="min-h-screen bg-light-primary dark:bg-dark-primary flex items-center justify-center transition-colors duration-300">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-neutral-600 font-medium">Loading...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-dark-accent-primary mx-auto mb-4"></div>
+          <p className="text-light-text-secondary dark:text-dark-text-secondary font-medium">Loading...</p>
         </div>
       </div>
     );
@@ -27,7 +28,9 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <AppContent />
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
     </AuthProvider>
   );
 };

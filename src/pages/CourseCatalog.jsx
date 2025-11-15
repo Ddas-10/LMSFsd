@@ -33,7 +33,7 @@ const CourseCatalog = () => {
     try {
       const updatedUser = await ApiService.enrollInCourse(user.id, courseId);
       updateUser(updatedUser);
-      await loadCourses(); // Refresh courses to update enrolled students count
+      await loadCourses();
       alert('Successfully enrolled in the course!');
     } catch (err) {
       alert('Enrollment failed: ' + err.message);
@@ -54,7 +54,7 @@ const CourseCatalog = () => {
       <div className="flex items-center justify-center py-20">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-neutral-600 font-medium">Loading courses...</p>
+          <p className="text-neutral-900 dark:text-white font-medium">Loading courses...</p>
         </div>
       </div>
     );
@@ -64,8 +64,8 @@ const CourseCatalog = () => {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-bold text-neutral-900 mb-2">Explore Courses</h1>
-        <p className="text-neutral-600 text-lg">Discover your next learning adventure</p>
+        <h1 className="text-4xl font-bold text-neutral-900 dark:text-white mb-2">Explore Courses</h1>
+        <p className="text-neutral-900 dark:text-white text-lg">Discover your next learning adventure</p>
       </div>
 
       {/* Search and Filters */}
@@ -85,7 +85,7 @@ const CourseCatalog = () => {
             <select
               value={filterLevel}
               onChange={(e) => setFilterLevel(e.target.value)}
-              className="px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-100 transition-all bg-white"
+              className="px-4 py-3 border-2 border-neutral-200 rounded-xl focus:border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-100 transition-all bg-white dark:bg-neutral-900 dark:text-white"
             >
               <option>All</option>
               <option>Beginner</option>
@@ -101,8 +101,8 @@ const CourseCatalog = () => {
 
       {/* Results Count */}
       <div className="flex items-center justify-between">
-        <p className="text-neutral-600">
-          Showing <span className="font-semibold text-neutral-900">{filteredCourses.length}</span> courses
+        <p className="text-neutral-900 dark:text-white">
+          Showing <span className="font-semibold text-neutral-900 dark:text-white">{filteredCourses.length}</span> courses
         </p>
       </div>
 
@@ -134,19 +134,21 @@ const CourseCatalog = () => {
                     <Badge size="sm">{course.level}</Badge>
                     <div className="flex items-center gap-1 text-amber-500">
                       <Star size={14} fill="currentColor" />
-                      <span className="text-sm font-semibold text-neutral-700">{rating.toFixed(1)}</span>
+                      <span className="text-sm font-semibold text-neutral-900 dark:text-white">{rating.toFixed(1)}</span>
                     </div>
                   </div>
-                  <h3 className="font-bold text-xl text-neutral-900 mb-2 group-hover:text-primary-600 transition-colors">
+
+                  <h3 className="font-bold text-xl text-neutral-900 dark:text-white mb-2 group-hover:text-primary-600 transition-colors">
                     {course.title}
                   </h3>
-                  <p className="text-neutral-600 text-sm mb-3 line-clamp-2">
+
+                  <p className="text-neutral-900 dark:text-white text-sm mb-3 line-clamp-2">
                     {course.description}
                   </p>
                 </div>
 
                 {/* Course Meta */}
-                <div className="flex flex-wrap gap-3 text-xs text-neutral-500 mb-4">
+                <div className="flex flex-wrap gap-3 text-xs text-neutral-700 dark:text-neutral-300 mb-4">
                   <span className="flex items-center gap-1">
                     <BookOpen size={14} />
                     {course.modules.length} modules
@@ -161,11 +163,12 @@ const CourseCatalog = () => {
                   </span>
                 </div>
 
+                {/* Footer */}
                 <div className="pt-3 border-t border-neutral-100">
-                  <p className="text-sm text-neutral-600 mb-3">
-                    Instructor: <span className="font-semibold text-neutral-900">{course.instructor}</span>
+                  <p className="text-sm text-neutral-900 dark:text-white mb-3">
+                    Instructor: <span className="font-semibold text-neutral-900 dark:text-white">{course.instructor}</span>
                   </p>
-                  
+
                   {isEnrolled ? (
                     <Button variant="secondary" fullWidth>
                       Continue Learning
@@ -191,8 +194,8 @@ const CourseCatalog = () => {
       {filteredCourses.length === 0 && (
         <Card className="text-center py-16">
           <BookOpen size={64} className="mx-auto text-neutral-300 mb-4" />
-          <h3 className="text-xl font-semibold text-neutral-700 mb-2">No courses found</h3>
-          <p className="text-neutral-500">Try adjusting your search or filters</p>
+          <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">No courses found</h3>
+          <p className="text-neutral-800 dark:text-neutral-300">Try adjusting your search or filters</p>
         </Card>
       )}
     </div>
