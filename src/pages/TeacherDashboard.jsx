@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { ApiService } from '../services/api';
 import { Card, Badge } from '../components/ui';
-import { 
-  BookOpen, Users, FileText, TrendingUp, Award, 
-  Clock, CheckCircle, AlertCircle, Target 
+import {
+  BookOpen, Users, FileText, TrendingUp, Award,
+  Clock, CheckCircle, AlertCircle, Target
 } from 'lucide-react';
 
 const TeacherDashboard = () => {
@@ -19,7 +19,7 @@ const TeacherDashboard = () => {
   const loadCourses = async () => {
     try {
       const allCourses = await ApiService.fetchCourses();
-      const managedCourses = allCourses.filter(c => 
+      const managedCourses = allCourses.filter(c =>
         user.managedCourses.includes(c.id)
       );
       setCourses(managedCourses);
@@ -60,7 +60,7 @@ const TeacherDashboard = () => {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        
+
         {/* Total Courses */}
         <Card hover className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
           <div className="flex items-center justify-between mb-4">
@@ -111,7 +111,7 @@ const TeacherDashboard = () => {
           <div className="flex items-center justify-between mb-4">
             <div className="p-3 bg-gradient-to-br from-amber-600 to-orange-600 rounded-xl shadow-lg">
               <Award className="text-white" size={24} />
-              </div>
+            </div>
             <CheckCircle className="text-amber-600" size={20} />
           </div>
           <div>
@@ -124,11 +124,11 @@ const TeacherDashboard = () => {
 
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
+
         {/* Courses List */}
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">My Courses</h2>
+            <h2 className="text-2xl font-bold text-neutral-900 dark:text-black">My Courses</h2>
           </div>
 
           {courses.length === 0 ? (
@@ -162,7 +162,7 @@ const TeacherDashboard = () => {
                       </p>
 
                       <div className="flex flex-wrap gap-4 text-sm">
-                        
+
                         <div className="flex items-center gap-2 text-neutral-600 dark:text-neutral-300">
                           <Users size={16} />
                           <span className="font-semibold">{course.enrolledStudents.length}</span>

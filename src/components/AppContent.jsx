@@ -77,7 +77,10 @@ const AppContent = () => {
                   <h1 className="text-2xl font-bold text-light-text-primary dark:text-dark-text-primary">
                     <span className="bg-gradient-to-r from-light-accent-primary to-light-accent-secondary dark:from-dark-accent-primary dark:to-dark-accent-secondary bg-clip-text text-transparent font-bold">EduTrack</span>
                   </h1>
-                  <p className="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary">Master Your Learning Journey</p>
+                  <p className="text-xs font-medium text-black">
+                    Master Your Learning Journey
+                  </p>
+
                 </div>
               </div>
             </div>
@@ -92,19 +95,19 @@ const AppContent = () => {
                     setSelectedCourseId(null);
                   }}
                   className={`
-                    flex items-center gap-2 px-5 py-2.5 rounded-xl
-                    font-semibold text-sm transition-all duration-300
-                    ${currentView === nav.id
-                      ? 'bg-gradient-to-r from-light-accent-primary to-light-accent-secondary dark:from-dark-accent-primary dark:to-dark-accent-secondary text-white shadow-lg transform scale-105'
-                      : 'text-light-text-primary hover:bg-light-card/60 dark:text-dark-text-primary dark:hover:bg-dark-card/60'
+        flex items-center gap-2 px-5 py-2.5 rounded-xl
+        font-semibold text-sm transition-all duration-300
+        ${currentView === nav.id
+                      ? 'bg-gradient-to-r from-light-accent-primary to-light-accent-secondary dark:from-dark-accent-primary dark:to-dark-accent-secondary text-black shadow-lg transform scale-105'
+                      : 'text-light-text-primary hover:bg-light-card/60 text-black dark:hover:bg-dark-card/60'
                     }
-                  `}
+      `}
                 >
-                  <nav.icon size={18} />
-                  <span>{nav.label}</span>
+                  {nav.label}
                 </button>
               ))}
             </div>
+
 
             {/* Right Side Actions */}
             <div className="flex items-center gap-3">
@@ -149,8 +152,8 @@ const AppContent = () => {
                     </span>
                   </div>
                   <div className="text-left">
-                    <p className="text-sm font-bold text-light-text-primary dark:text-dark-text-primary">{user.name.split(' ')[0]}</p>
-                    <p className="text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary capitalize">{user.role}</p>
+                    <p className="text-sm font-bold text-black">{user.name.split(' ')[0]}</p>
+                    <p className="text-xs font-medium text-black capitalize">{user.role}</p>
                   </div>
                   <ChevronDown size={16} className="text-light-text-secondary dark:text-dark-text-secondary" />
                 </button>
@@ -158,8 +161,8 @@ const AppContent = () => {
                 {profileMenuOpen && (
                   <div className="absolute right-0 mt-2 w-64 glass rounded-2xl shadow-2xl border border-white/20 py-2 animate-slide-in-bottom">
                     <div className="px-4 py-3 border-b border-light-border dark:border-dark-border">
-                      <p className="font-bold text-light-text-primary dark:text-dark-text-primary">{user.name}</p>
-                      <p className="text-sm text-light-text-secondary dark:text-dark-text-secondary">{user.email}</p>
+                      <p className="font-bold text-black">{user.name}</p>
+                      <p className="text-sm text-black">{user.email}</p>
                       {studentStats && (
                         <div className="flex gap-2 mt-2">
                           <span className="text-xs font-semibold text-light-accent-primary bg-light-accent-primary/10 dark:text-dark-accent-primary dark:bg-dark-accent-primary/10 px-2 py-1 rounded-lg">
@@ -172,20 +175,20 @@ const AppContent = () => {
                       )}
                     </div>
                     <button className="w-full px-4 py-2.5 text-left hover:bg-light-card/50 dark:hover:bg-dark-card/50 flex items-center gap-3 text-light-text-primary dark:text-dark-text-primary transition-colors">
-                      <User size={18} />
-                      <span className="text-sm font-medium">View Profile</span>
+                      <User size={18} className='text-black' />
+                      <span className="text-sm font-medium text-black">View Profile</span>
                     </button>
                     <button className="w-full px-4 py-2.5 text-left hover:bg-light-card/50 dark:hover:bg-dark-card/50 flex items-center gap-3 text-light-text-primary dark:text-dark-text-primary transition-colors">
-                      <Settings size={18} />
-                      <span className="text-sm font-medium">Settings</span>
+                      <Settings size={18} className='text-black' />
+                      <span className="text-sm font-medium text-black">Settings</span>
                     </button>
                     <div className="border-t border-light-border dark:border-dark-border mt-2 pt-2">
                       <button
                         onClick={handleLogout}
                         className="w-full px-4 py-2.5 text-left hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center gap-3 text-red-600 dark:text-red-300 transition-colors rounded-lg mx-2 w-[calc(100%-1rem)]"
                       >
-                        <LogOut size={18} />
-                        <span className="text-sm font-bold">Sign Out</span>
+                        <LogOut size={18} className='text-red-600' />
+                        <span className="text-sm font-bold text-red-600">Sign Out</span>
                       </button>
                     </div>
                   </div>

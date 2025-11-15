@@ -81,24 +81,24 @@ const MyCourses = ({ onSelectCourse }) => {
 
         <Card className="bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-neutral-700 dark:text-neutral-200">Completed</h3>
+            <h3 className="font-semibold text-neutral-700 dark:text-black-200">Completed</h3>
             <Target className="text-green-600" size={20} />
           </div>
-          <p className="text-4xl font-bold text-neutral-900 dark:text-white">
+          <p className="text-4xl font-bold text-neutral-900 dark:text-black">
             {user.enrolledCourses?.filter(id => user.progress[id] === 100).length || 0}
           </p>
-          <p className="text-sm text-neutral-600 dark:text-neutral-300 mt-2">Finished courses</p>
+          <p className="text-sm text-neutral-600 dark:text-black mt-2">Finished courses</p>
         </Card>
 
         <Card className="bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-neutral-700 dark:text-neutral-200">Not Started</h3>
+            <h3 className="font-semibold text-neutral-700 dark:text-black">Not Started</h3>
             <Clock className="text-amber-600" size={20} />
           </div>
-          <p className="text-4xl font-bold text-neutral-900 dark:text-white">
+          <p className="text-4xl font-bold text-neutral-900 dark:text-black">
             {user.enrolledCourses?.filter(id => !user.progress[id] || user.progress[id] === 0).length || 0}
           </p>
-          <p className="text-sm text-neutral-600 dark:text-neutral-300 mt-2">Ready to begin</p>
+          <p className="text-sm text-neutral-600 dark:text-black mt-2">Ready to begin</p>
         </Card>
       </div>
 
@@ -111,7 +111,7 @@ const MyCourses = ({ onSelectCourse }) => {
             const progress = user.progress[course.id] || 0;
 
             return (
-              <Card 
+              <Card
                 key={course.id}
                 hover
                 className="group cursor-pointer"
@@ -143,7 +143,7 @@ const MyCourses = ({ onSelectCourse }) => {
                   {course.description}
                 </p>
 
-                <ProgressBar 
+                <ProgressBar
                   progress={progress}
                   showLabel={true}
                   size="md"
